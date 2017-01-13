@@ -14,7 +14,6 @@ Setup
 Some standard macguffins for dealing with the DOM and setting up our canvas.
 
     $ = document.querySelector.bind(document)
-    EventTarget.prototype.on = EventTarget.prototype.addEventListener #YOLO
     canvas = $('#canvas')
     ctx = canvas.getContext("2d")
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -94,7 +93,7 @@ people aren't used to the raw power of properly normalised audio.
 
     context = mastergain = null
     setupAudio = ->
-      context = new (AudioContext or webkitAudioContext)()
+      context = new (window.AudioContext or window.webkitAudioContext)()
       mastergain = context.createGain()
       mastergain.gain.value = 0.75
       mastergain.connect context.destination
@@ -289,36 +288,36 @@ DOMfoolery
       i = y * DATA_W + x
       data[i] = newdata[i] = 1
 
-    canvas.on 'mousedown', (ev) ->
+    canvas.addEventListener 'mousedown', (ev) ->
       init() unless inited
       clicking = true if ev.button is 0
       click(ev)
-    canvas.on 'mouseup', -> clicking = false
-    canvas.on 'mouseout', -> clicking = false
-    canvas.on 'mousemove', click
+    canvas.addEventListener 'mouseup', -> clicking = false
+    canvas.addEventListener 'mouseout', -> clicking = false
+    canvas.addEventListener 'mousemove', click
 
-    $('#clear').on 'click', ->
+    $('#clear').addEventListener 'click', ->
       data[i] = newdata[i] = 0 for i in [0...data.length]
-    $('#random').on 'click', ->
+    $('#random').addEventListener 'click', ->
       data[i] = newdata[i] = Math.round(Math.random()) for i in [0...data.length]
-    $('#pause').on 'click', ->
+    $('#pause').addEventListener 'click', ->
       paused = !paused
       $('#pause').textContent = if paused then 'Play' else 'Pause'
 
     $('#octaves').value = OCTAVES
-    $('#octaves').on 'input', -> OCTAVES = $('#octaves').value * 1 or OCTAVES; reInit()
+    $('#octaves').addEventListener 'input', -> OCTAVES = $('#octaves').value * 1 or OCTAVES; reInit()
 
     $('#tones').value = TONES
-    $('#tones').on 'input', -> TONES = $('#tones').value * 1 or TONES; reInit()
+    $('#tones').addEventListener 'input', -> TONES = $('#tones').value * 1 or TONES; reInit()
 
     $('#scale_x').value = SCALE_X
-    $('#scale_x').on 'input', -> SCALE_X = $('#scale_x').value * 1 or SCALE_X; reInit()
+    $('#scale_x').addEventListener 'input', -> SCALE_X = $('#scale_x').value * 1 or SCALE_X; reInit()
 
     $('#scale_y').value = SCALE_Y
-    $('#scale_y').on 'input', -> SCALE_Y = $('#scale_y').value * 1 or SCALE_Y; reInit()
+    $('#scale_y').addEventListener 'input', -> SCALE_Y = $('#scale_y').value * 1 or SCALE_Y; reInit()
 
     $('#mid_note').value = MID_NOTE
-    $('#mid_note').on 'input', -> MID_NOTE = $('#mid_note').value * 1 or MID_NOTE; setupRegions()
+    $('#mid_note').addEventListener 'input', -> MID_NOTE = $('#mid_note').value * 1 or MID_NOTE; setupRegions()
 
     $('#time_scale').value = TIME_SCALE
-    $('#time_scale').on 'input', -> TIME_SCALE = $('#time_scale').value * 1 or TIME_SCALE
+    $('#time_scale').addEventListener 'input', -> TIME_SCALE = $('#time_scale').value * 1 or TIME_SCALE
